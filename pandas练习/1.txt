@@ -278,6 +278,8 @@ thresh=_NoDefault.no_default，subset=None， inplace =False）
 DataFrame.fillna( value=None , method=None , axis=None ,
                 inplace=False , limit=None , downcast=None )
 
+更改列的顺序
+df = df[['name', 'type', 'hp', 'evolution','pokedex']]
 
 
 排序

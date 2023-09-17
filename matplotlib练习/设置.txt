@@ -128,10 +128,10 @@ plt.pie(
     # with no shadows
     shadow = False,
 
-    # with colors
+    # with colors 可以使用sns.color_palette('pastel')来配色
     colors = ['blue','red'],
 
-    # with one slide exploded out
+    # with one slide exploded out 分离开
     explode = (0.15 , 0),
 
     # with the start angle at 90%
@@ -150,3 +150,6 @@ plt.title("Sex Proportion")
 # View the plot
 plt.tight_layout()
 plt.show()
+
+回归模型图
+sns.lmplot()
