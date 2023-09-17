@@ -439,7 +439,7 @@ offset=None , group_keys=_NoDefault.no_default )
 用于时间序列的频率转换和重新取样的方便方法。该对象必须有一个类似于数据时间的索引
 (DatetimeIndex,PeriodIndex, orTimedeltaIndex)，
 或者调用者必须将类似日期时间的系列/索引的标签传递给 on / level 关键字参数。
-示例：
+示例
 # Uses resample to sum each decade
 crimes = crime.resample('10AS').sum()
 # Uses resample to get the max value only for the "Population" column
