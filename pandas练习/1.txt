@@ -26,7 +26,8 @@ army.set_index('origin', inplace=True)
 inplace = True 改变原数据
 
 df.groupby()
-必须跟着数据处理函数
+
+必须跟着数据处理函数，还要注意对各列的处理方式，及是否要新增列以使数据有意义
 依某列成组，后面常接.agg()/transform()/apply分别处理各组
 In[]:
 price = chipo.groupby('item_name').agg({'price_per_item':'max'})
@@ -95,6 +96,18 @@ administrator F           36
 artist        F           13
               M           15
 
+***使已经被分组到行作为索引的值重新作为一列出现（画图时有用）
+gender_ocup['occupation'] = gender_ocup.index.get_level_values(0)
+
+                        gender（用agg才有）  occupation
+occupation    gender
+administrator F           36                administrator
+              M           43                administrator
+artist        F           13                artist
+              M           15                artist
+
+
+
 对指定列使用
 gender_ocup = users.groupby(['occupation', 'gender']).agg({'gender': 'count'})
 
@@ -137,6 +150,7 @@ falcon      True       True
 dog        False       True
 
 Series.isin(values)
+df[df.列名.isin( 列表/Index() )]
 系列中的元素是否包含在values
 >>> s = pd.Series(['lama', 'cow', 'lama', 'beetle', 'lama',
 ...                'hippo'], name='animal')
@@ -172,6 +186,12 @@ army.loc[['Arizona','California'],'deaths']取行列
 army.loc[:,'deaths'].iloc[-3]
 army.loc['Arizona'].iloc[2]
 
+对DataFrame的切片进行更改赋值时使用，否则会报错
+customers.loc[:,'Country'] = customers.index.get_level_values(1)
+或
+customers = customers.copy()
+customers['Country'] = customers.index.get_level_values(1)]
+
 bool下标取法 要求形状相同
 chipo:
  #   Column              Non-Null Count  Dtype
@@ -184,10 +204,12 @@ chipo:
 
 to get 'Salad' which is in the Column 'item_name':
 chipo[chipo.item_name == 'Salad']
-加强条件筛选
-chipo[(chipo.item_name=='Canned Soda') & (chipo.quantity > 1)]
 
 数据处理-----------------------------------------------------------------
+
+加强条件筛选
+chipo[(chipo.item_name=='Canned Soda') & (chipo.quantity > 1)]
+online_rt = online_rt[online_rt.Quantity > 0]
 
 改变数据类型
 chipo.item_price = chipo.item_price.apply(lambda x:float(x[1:-1]))
@@ -204,9 +226,6 @@ df/列.describe( percentiles=None , include=None ,
 描述性统计分析，返回一个包含统计结果的 DataFrame。
 统计结果包括计数（count）、平均值（mean）、标准差（std）、
 最小值（min）、四分位数（25%、50%、75%）和最大值（max）。
-
-
-
 
 合并数据
 pd.concat
@@ -322,6 +341,44 @@ VAL    6571
 ROS    6572
 KIL    6569
 dtype: int64
+
+
+pandas.cut( x , bins , right=True , labels=None , retbins=False , precision=3 ,
+include_lowest=False , duplicates='raise' , ordered=True )
+Bin值成离散区间，当单个数据太过分散不易观察时适用
+Usecut当您需要对数据值进行分割和排序时,可以使用这个函数。这个函数对于从连续变量到分类变量也很有用。
+例如,当你需要对数据值进行分割和分类时,这个函数也很有用。cut可以将年龄转换为年龄范围的组。
+支持分拣成等量的分仓,或预先指定的分仓数组。
+
+# 划分bucket使数据特征更加清晰
+price_start = 0
+price_end = 50
+price_interval = 1
+
+#Creating the buckets to collect the data accordingly
+buckets = np.arange(price_start,price_end,price_interval)
+
+#Select the data and sum
+revenue_per_price = online_rt.groupby(pd.cut(online_rt.UnitPrice, buckets)).Revenue.sum()
+
+#作图
+revenue_per_price.plot()
+
+#Place labels
+plt.xlabel('Unit Price (in buckets of '+str(price_interval)+')')
+plt.ylabel('Revenue')
+
+#Even though the data is bucketed in intervals of 1,
+#I'll plot ticks a little bit further apart from each other to avoid cluttering.
+#设置坐标轴刻度
+plt.xticks(np.arange(price_start,price_end,3),
+           np.arange(price_start,price_end,3))
+plt.yticks([0, 500000, 1000000, 1500000, 2000000, 2500000],
+           ['0', '$0.5M', '$1M', '$1.5M', '$2M', '$2.5M'])
+plt.show()
+
+#Looks like a major chunk of our revenue comes from items worth $0-$3!
+
 
 字符串操作----------------------------------------------------------------------------
 pandas.Series.str常用于列对象上，大多接受正则
