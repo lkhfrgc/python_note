@@ -148,22 +148,6 @@ Series.isin(values)
 4     True
 5    False
 
-改变数据类型
-chipo.item_price = chipo.item_price.apply(lambda x:float(x[1:-1]))
-chipo.item_price = pd.to_numeric(chipo.item_price.str.slice(1))
-chipo.item_price.str.slice(1) -> 对￥2.31进行切片
-
-# 取所有7月数据
-rqr['销售日期']=rqr['销售日期'].astype(str)
-rdp[rdp['销售日期'].str.startswith('2020-07')]
-
-
-df/列.describe( percentiles=None , include=None ,
-                exclude=None , datetime_is_numeric=False )
-描述性统计分析，返回一个包含统计结果的 DataFrame。
-统计结果包括计数（count）、平均值（mean）、标准差（std）、
-最小值（min）、四分位数（25%、50%、75%）和最大值（max）。
-
 
 取两列元素
 army[['veterans','deaths']]
@@ -204,6 +188,25 @@ chipo[chipo.item_name == 'Salad']
 chipo[(chipo.item_name=='Canned Soda') & (chipo.quantity > 1)]
 
 数据处理-----------------------------------------------------------------
+
+改变数据类型
+chipo.item_price = chipo.item_price.apply(lambda x:float(x[1:-1]))
+chipo.item_price = pd.to_numeric(chipo.item_price.str.slice(1))
+chipo.item_price.str.slice(1) -> 对￥2.31进行切片
+
+# 取所有7月数据
+rqr['销售日期']=rqr['销售日期'].astype(str) ***astype
+rdp[rdp['销售日期'].str.startswith('2020-07')]
+
+
+df/列.describe( percentiles=None , include=None ,
+                exclude=None , datetime_is_numeric=False )
+描述性统计分析，返回一个包含统计结果的 DataFrame。
+统计结果包括计数（count）、平均值（mean）、标准差（std）、
+最小值（min）、四分位数（25%、50%、75%）和最大值（max）。
+
+
+
 
 合并数据
 pd.concat
