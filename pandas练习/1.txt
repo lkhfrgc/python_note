@@ -431,7 +431,7 @@ Year  Population     Total  ...  Burglary  Larceny_Theft  Vehicle_Theft
 2  1962-01-01   185771000   3752200  ...    994300        2089600         366800
 ...
 
-划分时间，随后进行聚合操作
+划分时间，随后对取样的每相邻两个间的数据进行聚合操作
 DataFrame.resample( rule , axis=0 , closed=None , label=None , convention='start' ,
 kind=None , loffset=None , base=None , on=None , level=None , origin='start_day' ,
 offset=None , group_keys=_NoDefault.no_default )
@@ -446,6 +446,9 @@ crimes = crime.resample('10AS').sum()
 population = crime['Population'].resample('10AS').max()
 # Updating the "Population" column
 crimes['Population'] = population
+#以下两者作用相同
+data.resample('W').mean()/data.groupby(data.index.to_period('W')).mean()
+
 
 以日期为索引时，取每年第一个月求其每一列的平均值
 data.loc[data.index.month == 1].mean()
@@ -456,6 +459,8 @@ DataFrame.to_period( freq=None , axis=0 , copy=True )
 将DataFrame从DatetimeIndex转换为具有所需频率的PeriodIndex(如果没有通过,则从索引中推断)
 'https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases'
 data.groupby(data.index.to_period('Y')).mean()
+
+
 -----------------------------------------------------------------------------------
 # 显示设置
 import pandas as pd
