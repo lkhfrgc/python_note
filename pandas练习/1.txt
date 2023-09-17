@@ -449,6 +449,13 @@ crimes['Population'] = population
 
 以日期为索引时，取每年第一个月求其每一列的平均值
 data.loc[data.index.month == 1].mean()
+
+时间段：
+DataFrame.to_period( freq=None , axis=0 , copy=True )
+将DataFrame从DatetimeIndex转换为PeriodIndex。
+将DataFrame从DatetimeIndex转换为具有所需频率的PeriodIndex(如果没有通过,则从索引中推断)
+'https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases'
+data.groupby(data.index.to_period('Y')).mean()
 -----------------------------------------------------------------------------------
 # 显示设置
 import pandas as pd
