@@ -166,7 +166,10 @@ df[df.列名.isin( 列表/Index() )]
 
 取两列元素
 army[['veterans','deaths']]
-army[army.origin=='veterans']取列
+army[army.origin=='veterans']取行
+
+取1到4列元素
+hdf[hdf.columns[:4]]
 
 iloc
 纯粹基于整数位置的索引,按位置选择
@@ -182,6 +185,11 @@ army.loc[army.deaths>50] 取满足该条件的所有行列，等价于army[army.
 army.loc[['Arizona','California']]取行
 army.loc[:,'deaths'] 取列
 army.loc[['Arizona','California'],'deaths']取行列
+
+多层次索引
+hdf.loc[(['AA', 'DL', 'US'], ['ORD', 'DSM']), ['dep_time', 'dep_delay']]
+        （这里是不同的行索引对应的列）
+hdf.loc[pd.IndexSlice[:, ['ORD', 'DSM']], ['dep_time', 'dep_delay']]
 
 取单行单列结合使用
 army.loc[:,'deaths'].iloc[-3]
