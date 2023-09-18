@@ -20,6 +20,7 @@ df.head()/tail()/info
 
 df.index
 表格index
+可以通过bool列表取符合要求的index，来对符合要求的行整体操作
 
 army.set_index('origin', inplace=True)
 将某一列设为索引
@@ -268,6 +269,9 @@ DataFrame.drop（标签=None，axis=0，index=None，columns=None，
 从行或列中删除指定的标签。
 通过指定标签名称和相应的轴,或直接指定索引或列名来移除行或列。当使用多索引时,可以通过指定级别来删除不同级别的标签。
 
+删除'Total Equity'值为0的行
+idx = monthly.index[monthly['Total Equity']==0]
+monthly.drop(idx,inplace=True)
 
 缺失值：
 删除缺失的数值。
@@ -484,7 +488,12 @@ import datetime
 python自带的日期类型到pandas中是object，需要转换pd.to_datetime()
 
 
+
 转换为日期类型
+
+将索引转化为日期类型
+df.index = pd.to_datetime(df.index)
+
 crime.Year = pd.to_datetime(crime.Year, format='%Y')
 (若不加%Y则全都会变成1970-01-01 00:00:00.000001960)
 Year  Population     Total  ...  Burglary  Larceny_Theft  Vehicle_Theft
@@ -492,6 +501,8 @@ Year  Population     Total  ...  Burglary  Larceny_Theft  Vehicle_Theft
 1  1961-01-01   182992000   3488000  ...    949600        1913000         336000
 2  1962-01-01   185771000   3752200  ...    994300        2089600         366800
 ...
+
+
 
 划分时间，随后对取样的每相邻两个间的数据进行聚合操作
 DataFrame.resample( rule , axis=0 , closed=None , label=None , convention='start' ,
