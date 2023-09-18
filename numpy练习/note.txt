@@ -1,0 +1,72 @@
+数据操作---------------------------------------------------------------------------------------------
+
+new_array = array.astype(np.float)
+
+取索引
+1.  切片索引
+2.  布尔掩码(mask)索引 利用 ~ | &
+    data[data < 0] = 0
+3.  花式索引：传入列表取多行/列，或作为点坐标
+
+
+转置
+.T
+np.transpose()
+np.swapaxes()
+
+矩阵乘法
+@
+
+随机数生成
+np.random
+
+permutation	返回序列的随机排列，或返回排列范围
+shuffle	就地随机排列序列
+uniform	从均匀分布中抽取样本
+integers	从给定的低到高范围绘制随机整数
+standard_normal	从均值为 0 且标准差为 1 的正态分布中抽取样本
+binomial	从二项分布中抽取样本
+normal	从正态（高斯）分布中抽取样本
+beta	从 beta 分布中提取样本
+chisquare	从卡方分布中抽取样本
+gamma	从伽马分布中抽取样本
+uniform	从均匀 [0， 1） 分布中抽取样本
+
+作用于数组的函数
+                            表 4.4.. 一些一元通用函数
+功能	描述
+abs, fabs	                                            逐元素计算整数、浮点或复数值的绝对值
+sqrt	                                                计算每个元素的平方根（相当于arr ** 0.5)
+square	                                                计算每个元素的平方（相当于arr ** 2)
+exp	                                                    计算指数 ex每个元素
+log, log10, log2, log1p	                                分别为自然对数（以 e 为底）、以对数为底 10、以对数为底 2 和对数（1 + x）
+sign	                                                计算每个元素的符号：1（正）、0（零）或 –1（负）
+ceil	                                                计算每个元素的上限（即大于或等于该数字的最小整数）
+floor	                                                计算每个元素的下限（即小于或等于每个元素的最大整数）
+rint	                                                将元素舍入到最接近的整数，保留dtype
+modf	                                                将数组的小数部分和整数部分作为单独的数组返回
+isnan	                                                返回布尔数组，指示每个值是否为 （不是数字）NaN
+isfinite, isinf	                                        返回布尔数组，分别指示每个元素是有限的（非、非）还是无限的infNaN
+cos, cosh, sin, sinh, tan, tanh	                        正则三角函数和双曲三角函数
+arccos, arccosh, arcsin, arcsinh, arctan, arctanh	    反三角函数
+logical_not	                                            计算元素的真值（相当于notx~arr)
+
+                表 4.5.. 一些二元通用函数
+功能	描述
+add	                    在数组中添加相应的元素
+subtract	            从第一个数组中减去第二个数组中的元素
+multiply	            乘以数组元素
+divide, floor_divide	除法或下限除法（截断余数）
+power	                将第一个数组中的元素提升到第二个数组中指示的幂
+maximum, fmax	        元素最大值; 忽略fmaxNaN
+minimum, fmin	        元素最小值; 忽略fminNaN
+mod	                    逐元素模量（除法余数）
+copysign	            将第二个参数中的值符号复制到第一个参数中的值
+
+greater, greater_equal,
+less, less_equal, equal,
+not_equal	            执行逐元素比较，生成布尔数组（相当于中缀运算符>, >=, <, <=, ==, !=)
+
+logical_and	            计算 AND （） 逻辑运算的元素真值&
+logical_or	            计算 OR （） 逻辑运算的元素真值|
+logical_xor	            计算异或 （） 逻辑运算的元素真值^
