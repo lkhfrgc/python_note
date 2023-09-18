@@ -193,6 +193,10 @@ customers.loc[:,'Country'] = customers.index.get_level_values(1)
 customers = customers.copy()
 customers['Country'] = customers.index.get_level_values(1)]
 
+利用掩码
+mask = wine.alcohol.notnull()
+wine.alcohol[mask]
+
 bool下标取法 要求形状相同
 chipo:
  #   Column              Non-Null Count  Dtype
@@ -257,6 +261,7 @@ DataFrame.reset_index( level=None , drop=False , inplace =False , col_level=0 ,
             col_fill='' , allow_duplicates =_NoDefault.no_default , names=None )
 重置指数,或其中的一个级别。
 重置DataFrame的索引,并使用默认的索引。如果DataFrame有一个MultiIndex,本方法可以删除一个或多个级别
+drop=True: 原索引不会成为新列
 
 删除
 
@@ -273,7 +278,13 @@ DataFrame.drop（标签=None，axis=0，index=None，columns=None，
 idx = monthly.index[monthly['Total Equity']==0]
 monthly.drop(idx,inplace=True)
 
+删除指定的列
+wine = wine.drop(wine.columns[[0,3,6,8,11,12,13]], axis = 1)
+
 缺失值：
+
+可利用np.nan来进行缺失值赋值
+
 删除缺失的数值。
 DataFrame.dropna（axis=0，how=_NoDefault.no_default，
 thresh=_NoDefault.no_default，subset=None， inplace =False）
