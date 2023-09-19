@@ -12,16 +12,13 @@ new_array = array.astype(np.float)
 3.  花式索引：传入列表取多行/列，或作为点坐标
 
 
-转置
-.T
-np.transpose()
-np.swapaxes()
-
-矩阵乘法
-@
-
 随机数生成
 np.random
+
+利用随机数生成器
+rng = np.random.default_rng(seed=12345)
+调用生成器中的方法
+draws = rng.integers(0, 2, size=nsteps)
 
 permutation	返回序列的随机排列，或返回排列范围
 shuffle	就地随机排列序列
@@ -35,10 +32,11 @@ chisquare	从卡方分布中抽取样本
 gamma	从伽马分布中抽取样本
 uniform	从均匀 [0， 1） 分布中抽取样本
 
+
 作用于数组的函数
-有的可以 从numpy   np.
-有的可以 从数组     arr.
-注意其参数可能不同
+
+np.
+
                             表 4.4.. 一些一元通用函数
 功能	描述
 abs, fabs	                                            逐元素计算整数、浮点或复数值的绝对值
@@ -77,6 +75,40 @@ logical_and	            计算 AND （） 逻辑运算的元素真值&
 logical_or	            计算 OR （） 逻辑运算的元素真值|
 logical_xor	            计算异或 （） 逻辑运算的元素真值^
 
+数组统计函数 arr.
+可传入参数进行指定维度等操作
+sum	数组中或沿轴的所有元素的总和;零长度数组的总和为 0
+mean	算术平均值;在零长度数组上无效（返回）NaN
+std, var	分别为标准差和方差
+min, max	最小值和最大值
+argmin, argmax	最小元素和最大元素第一次出现的位置
+cumsum	从 0 开始的元素的累积总和
+cumprod	从 1 开始的元素的累积乘积
+
+布尔数组
+用来计数
+(arr > 0).sum()
+
+检查是否 所有/有 元素为True
+bools = np.array([False, False, True, False])
+
+In [209]: bools.any()
+Out[209]: True
+
+In [210]: bools.all()
+Out[210]: False
+
+数组集操作
+
+unique(x)	返回数组中排序的唯一元素x
+intersect1d(x, y)	计算 x 和 y 中排序的公共元素
+union1d(x, y)	计算元素的排序并集
+in1d(x, y)	计算一个布尔数组，指示 的每个元素是否包含在 x 和 y
+setdiff1d(x, y)	返回元素在x但不在y者
+setxor1d(x, y)	元素位于任一数组中，但不是同时位于两个数组中
+
+排序
+arr.sort()就地排序
 
 numpy.meshgrid( *xi , copy=True , sparse=False , indexing='xy' )
 从坐标向量返回坐标矩阵。
@@ -92,4 +124,36 @@ np.where(a < 4, a(条件为真时返回原值), -1(否则返回该值))  # -1 is
 >>>array([[ 0,  1,  2],
        [ 0,  2, -1],
        [ 0,  3, -1]])
+线性代数----------------------------------------------------------
 
+转置
+.T
+np.transpose()
+np.swapaxes()
+
+矩阵乘法
+@
+
+计算矩阵的(乘法)逆
+linalg.inv(a)
+
+计算矩阵的qr因子化。
+linalg.qr(a, mode='reduced')
+将矩阵 a 分解为qr，其中 q 是正交的， r 是上三角的
+
+diag	将方阵的对角线（或非对角线）元素作为一维数组返回，
+        或将一维数组转换为对角线上为零的方阵
+dot	    矩阵乘法
+trace	计算对角线元素的总和
+det	    计算矩阵行列式
+eig	    计算方阵的特征值和特征向量
+inv	    计算方阵的逆矩阵
+pinv	计算矩阵的摩尔-彭罗斯伪逆
+qr	    计算 QR 分解
+svd	    计算奇异值分解 （SVD）
+solve	求解 x 的线性系统 Ax = b，其中 A 是方阵
+lstsq	计算最小二乘解以Ax = b
+
+在磁盘上保存和加载-------------------------------------------------
+np.save()
+np.load()
