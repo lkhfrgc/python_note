@@ -2,6 +2,13 @@
 df = pd.read_csv(url, sep='...', index_col='作为index的列名')
 读取之前先观察数据特征，然后决定使用什么参数
 
+df.T
+对表进行转置
+请注意，如果列不都具有相同的数据类型，则转置将丢弃列数据类型，
+因此转置然后转置回来可能会丢失以前的类型信息。在这种情况下，列成为纯 Python 对象的数组。
+
+判断索引标签是否唯一
+df.index.is_unique
 
 df.shape
 表格形状
@@ -108,7 +115,6 @@ artist        F           13                artist
               M           15                artist
 
 
-
 对指定列使用
 gender_ocup = users.groupby(['occupation', 'gender']).agg({'gender': 'count'})
 
@@ -123,12 +129,13 @@ unstack( level=- 1 , fill_value=None )
 Returns a DataFrame having a new level of column labels whose
 inner-most level consists of the pivoted index labels
 
+
 users.列.nunique()
 # 等同于users.列.value_counts().count()
 计算指定轴上的独特元素的数量。
 返回带有不同元素数量的系列。可以忽略NaN值。
 
-#value_counts()
+value_counts()
 df.列名.value_counts()
 returns the count of unique elements
 对所选列的不同对象进行计数
@@ -142,6 +149,45 @@ administrator     79
 engineer          67
 programmer        66
 
+对整个表格使用该方法，并将NaN转为0(对列的每一个元素)
+df.apply(pd.value_counts).fillna(0)
+结果中的行标签是所有列中出现的不同值。这些值是每列中这些值的相应计数
+Qu1  Qu2  Qu3
+1  1.0  1.0  1.0
+2  0.0  2.0  1.0
+3  2.0  2.0  0.0
+4  2.0  0.0  2.0
+5  0.0  0.0  1.0
+
+df.value_counts() （将整行视为一个元素计算这样的行出现的次数）
+计算计数时将数据帧的每一行视为元组，以确定每个不同行的出现次数
+data:
+a  b
+0  1  0
+1  1  0
+2  1  1
+3  2  0
+4  2  0
+
+out:
+a  b
+1  0    2
+2  0    2
+1  1    1
+
+pandas.unique(values)
+返回基于哈希表的唯一值
+Index.unique(level=None)
+返回索引中的唯一值
+Series.unique()
+返回Series对象的唯一值
+
+get_indexer
+将数组中每个值的整数索引计算到另一个非重复值数组中
+有助于数据对齐和联接类型操作
+>>> index = pd.Index(['c', 'a', 'b'])
+>>> index.get_indexer(['a', 'b', 'x'])
+array([ 1,  2, -1])
 
 DataFrame.isin(values)
 DataFrame中的每个元素是否包含在数值中
@@ -163,21 +209,38 @@ df[df.列名.isin( 列表/Index() )]
 4     True
 5    False
 
+索引
+
+df[column]	从数据帧中选择单列或列序列;特殊情况便利性：布尔数组（筛选器行）、切片（切片行）或布尔数据帧（基于某些条件设置值）
 
 取两列元素
 army[['veterans','deaths']]
-army[army.origin=='veterans']取行
+取行
+army[army.origin=='veterans']
+利用索引值
+df.['b']
+利用切片
+df.[2:4]
 
 取1到4列元素
 hdf[hdf.columns[:4]]
 
-iloc
+iloc`
 纯粹基于整数位置的索引,按位置选择
 army.iloc[0]取行
 army.iloc[:,1:4]取列
 army.iloc[3:8,3:7]取行列
 
+df.iloc[rows]	按整数位置从数据帧中选择单行或行子集
+df.iloc[:, cols]	按整数位置选择单列或列子集
+df.iloc[rows, cols]	按整数位置选择行和列
+df.at[row, col]	按行和列标签选择单个标量值
+df.iat[row, col]	按行和列位置（整数）选择单个标量值
+reindex方法	按标签选择行或列
 
+df.loc[rows]	按标签从数据帧中选择单行或行子集
+df.loc[:, cols]	按标签选择单列或列子集
+df.loc[rows, cols]	按标签选择行和列
 loc
 通过标签或布尔数组访问一组行和列
 army.loc[['Maine', 'Alaska'],['deaths', 'size' ,'deserters' ]]
@@ -194,6 +257,7 @@ hdf.loc[pd.IndexSlice[:, ['ORD', 'DSM']], ['dep_time', 'dep_delay']]
 取单行单列结合使用
 army.loc[:,'deaths'].iloc[-3]
 army.loc['Arizona'].iloc[2]
+
 
 对DataFrame的切片进行更改赋值时使用，否则会报错
 customers.loc[:,'Country'] = customers.index.get_level_values(1)
@@ -219,6 +283,37 @@ to get 'Salad' which is in the Column 'item_name':
 chipo[chipo.item_name == 'Salad']
 
 数据处理-----------------------------------------------------------------
+
+count	非NaN数
+describe	计算汇总统计数据集
+min, max	计算最小值和最大值
+argmin, argmax	分别计算获得最小值或最大值的索引位置（整数）;在数据帧对象上不可用
+idxmin, idxmax	分别计算获取最小值或最大值的索引标签
+quantile	计算范围从 0 到 1 的样本分位数（默认值：0.5）
+sum	值的总和
+mean	值的平均值
+median	值的算术中位数（50% 分位数(quantile)）
+mad	平均值与平均值的绝对偏差
+prod	所有值的产品
+var	值的样本方差
+std	值的样本标准偏差
+skew	值的样本偏度（第三个矩(moment)）
+kurt	值的样本峰度（第四矩(moment)）
+cumsum	值的累积总和
+cummin, cummax	值的累积最小值或最大值，分别
+cumprod	值的累积乘积
+diff	计算第一个算术差值（对时序有用）
+pct_change	计算百分比变化
+
+相关性和协方差
+
+序列方法计算两个序列中重叠的、非 NA 的按索引对齐的值的相关性 corr / 协方差 cov
+单独计算两个属性间的相关性
+returns["MSFT"].corr(returns["IBM"])
+Out[283]:0.49976361144151166
+计算相关性矩阵
+returns.corr()
+
 
 加强条件筛选
 chipo[(chipo.item_name=='Canned Soda') & (chipo.quantity > 1)]
@@ -271,6 +366,19 @@ DataFrame.reset_index( level=None , drop=False , inplace =False , col_level=0 ,
 重置DataFrame的索引,并使用默认的索引。如果DataFrame有一个MultiIndex,本方法可以删除一个或多个级别
 drop=True: 原索引不会成为新列
 
+df.reindex()
+labels	用作索引的新序列。可以是索引实例或任何其他类似序列的 Python 数据结构。
+        索引将完全按原样使用，无需任何复制。
+index	使用传递的序列作为新的索引标签。
+columns	使用传递的序列作为新的列标签。
+axis	要重新编制索引的轴，无论是"index"（行）还是 "columns"。reindex(index=new_labels)reindex(columns=new_labels)
+method	插值（填充）法; 向前填充"ffill"/向后填充"bfill"。
+fill_value	通过重新编制索引引入缺失数据时要使用的替换值。如果希望缺少的标签在结果中具有 null 值，请使用（默认行为）。fill_value="missing"
+limit	正向填充或回填时，要填充的最大尺寸间隙（以元素数为单位）。
+tolerance	正向填充或回填时，要填充的最大尺寸间隙（以绝对数字距离表示）以查找不精确匹配。
+level	在多索引级别上匹配简单索引;否则，请选择子集。
+copy	如果 ，即使新索引等效于旧索引，也始终复制基础数据;如果为 ，则当索引等效时，不要复制数据。TrueFalse
+
 删除
 
 简单删除列：
@@ -282,6 +390,12 @@ DataFrame.drop（标签=None，axis=0，index=None，columns=None，
 从行或列中删除指定的标签。
 通过指定标签名称和相应的轴,或直接指定索引或列名来移除行或列。当使用多索引时,可以通过指定级别来删除不同级别的标签。
 
+删除指定行
+data.drop(index=["Colorado", "Ohio"])
+
+删除指定列
+data.drop(columns=["two"])
+
 删除'Total Equity'值为0的行
 idx = monthly.index[monthly['Total Equity']==0]
 monthly.drop(idx,inplace=True)
@@ -291,7 +405,9 @@ wine = wine.drop(wine.columns[[0,3,6,8,11,12,13]], axis = 1)
 
 缺失值：
 
-可利用np.nan来进行缺失值赋值
+可利用np.nan来进行缺失值 NaN 赋值
+
+NaN + 数字 = NaN
 
 删除缺失的数值。
 DataFrame.dropna（axis=0，how=_NoDefault.no_default，
