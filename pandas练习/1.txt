@@ -1,7 +1,58 @@
 读
-df = pd.read_csv(url, sep='...', index_col='作为index的列名')
+df = pd.read_csv(url, sep='...', index_col='作为index的列名'/['从多个列','形成分层索引'])
 读取之前先观察数据特征，然后决定使用什么参数
+path	        指示文件系统位置、URL 或类似文件的对象的字符串。
+sep或delimiter	用于拆分每行中的字段的字符序列或正则表达式。
+header	        用作列名的行号;默认为 0（第一行），但没有标题行，则应为 <>。None
+index_col	    用作结果中行索引的列号或名称;可以是单个名称/编号，也可以是分层索引的列表。
+names	        结果的列名列表。
+skiprows	    要忽略的文件开头的行数或要跳过的行号列表（从 0 开始）。
+na_values	    要替换为 NA 的值序列。除非传递，否则它们将添加到默认列表中。keep_default_na=False
+keep_default_na	是否使用默认的NA值列表（默认）。True
+comment	        用于将注释从行尾拆分的字符。
+parse_dates	    尝试将数据解析为 ; 默认情况下。如果 ，将尝试解析所有列。否则，可以指定要分析的列号或名称的列表。
+                如果列表的元素是元组或列表，则将多个列组合在一起并解析为日期（例如，如果日期/时间拆分为两列）。datetimeFalseTrue
+keep_date_col	如果连接列以解析日期，请保留连接列; 默认情况下。False
+converters	    包含列号或名称映射到函数的字典（例如，将函数应用于列中的所有值）。{"foo": f}f"foo"
+dayfirst	    解析可能不明确的日期时，应视为国际格式（例如，7 年 6 月 2012 日至 7 年 2012 月 <> 日>）; 默认情况下。False
+date_parser	    用于分析日期的函数。
+nrows	        要从文件开头读取的行数（不包括标题）。
+iterator	    返回一个对象以逐段读取文件。此对象也可以与语句一起使用。TextFileReaderwith
+chunksize	    对于迭代，文件块的大小。
+skip_footer	    文件末尾要忽略的行数。
+verbose	        打印各种解析信息，例如在文件转换的每个阶段花费的时间和内存使用信息。
+encoding	    文本编码（例如，对于 UTF-8 编码的文本）。默认为 if 。"utf-8"utf-8"None
+squeeze	        如果解析的数据仅包含一列，则返回 Series。
+thousands	    数千个分隔符（例如，或）;默认值为 。",""."None
+decimal	        数字中的小数点分隔符（例如，或）;默认值为 。"."",""."
+engine	        要使用的CSV解析和转换引擎;可以是 、 或 之一。默认值为 ，尽管较新的引擎可以更快地解析某些文件。
+                引擎速度较慢，但支持其他引擎没有的某些功能。"c""python""pyarrow""c""pyarrow""python"
 
+pd.options.display.max_rows = 10
+
+分段读取大型文件
+chunker = pd.read_csv("examples/ex6.csv", chunksize=1000) 读取1000行
+chunker允许您根据 迭代文件的各个部分
+tot = pd.Series([], dtype='int64')
+for piece in chunker:
+    tot = tot.add(piece["key"].value_counts(), fill_value=0)
+
+tot = tot.sort_values(ascending=False)
+
+处理错误数据
+import csv
+
+delimiter	    用于分隔字段的单字符字符串;默认为 。","
+lineterminator	用于写入的行终止符;默认为 。读者忽略这一点并识别跨平台行终止符。"\r\n"
+quotechar	    为带有特殊字符的字段（如分隔符）引用字符;默认值为 。'"'
+quoting	        引用惯例。选项包括（引用所有字段）、（仅具有特殊字符（如分隔符）的字段）和（无引号）。有关完整详细信息，
+                请参阅 Python 的文档。默认值为 。csv.QUOTE_ALLcsv.QUOTE_MINIMALcsv.QUOTE_NONNUMERICcsv.QUOTE_NONEQUOTE_MINIMAL
+skipinitialspace忽略每个分隔符后的空格;默认值为 。False
+doublequote	    如何处理字段中的引用字符;如果为 ，则加倍（有关完整的详细信息和行为，请参阅联机文档）。True
+escapechar	    用于转义分隔符的字符串（如果设置为 ）;默认情况下禁用。quotingcsv.QUOTE_NONE
+
+
+-------------------------------------------------------------------------------------------------------------
 df.T
 对表进行转置
 请注意，如果列不都具有相同的数据类型，则转置将丢弃列数据类型，
@@ -282,6 +333,61 @@ chipo:
 to get 'Salad' which is in the Column 'item_name':
 chipo[chipo.item_name == 'Salad']
 
+数据清理和准备-------------------------------------------------------------------------------------------------------------
+
+缺失值：
+
+判断是否为NaN
+df.isna()
+df.notna
+
+
+可利用np.nan来进行缺失值 NaN 赋值
+
+NaN + 数字 = NaN
+
+删除缺失的数值。
+dfd.dropna（axis=0，how(删除方式)=_NoDefault.no_default，
+thresh（最多保留的NaN值）=_NoDefault.no_default，subset=None， inplace =False）
+
+使用指定方法填写NA/NAN值
+df.fillna( value=None , method=None , axis=None ,
+                inplace=False , limit=None , downcast=None )
+使用字典调用时，可以对每列使用不同的填充值：
+df.fillna({1: 0.5, 2: 0})
+参数：
+value	用于填充缺失值的标量值或类似字典的对象
+method	插值法：（向后填充）或（向前填充）中的一种;默认值为"bfill""ffill"None
+axis	要填充的轴 （ 或 ）;默认值为"index""columns"axis="index"
+limit	对于向前和向后填充，要填充的最大连续周期数
+
+数据转换
+
+检查行是否重复
+df.duplicated()
+删除重复行
+df.drop_duplicates(subset(默认作用于所有列，也可以通过列表指定)=["k1","k2"])
+
+使用函数或映射转换数据
+meat_to_animal = {
+  "bacon": "pig",
+  "pulled pork": "pig",
+  "pastrami": "cow",
+  "corned beef": "cow",
+  "honey ham": "pig",
+  "nova lox": "salmon"
+}
+data["animal"] = data["food"].map(meat_to_animal)
+或
+def get_animal(x):
+        return meat_to_animal[x]
+data["food"].map(get_animal)
+
+替换值
+
+df.replace(被替换的值/[多个值], 替换后的值/[对应多个替换])
+df.replace({字典})
+
 数据处理-----------------------------------------------------------------
 
 count	非NaN数
@@ -402,20 +508,6 @@ monthly.drop(idx,inplace=True)
 
 删除指定的列
 wine = wine.drop(wine.columns[[0,3,6,8,11,12,13]], axis = 1)
-
-缺失值：
-
-可利用np.nan来进行缺失值 NaN 赋值
-
-NaN + 数字 = NaN
-
-删除缺失的数值。
-DataFrame.dropna（axis=0，how=_NoDefault.no_default，
-thresh=_NoDefault.no_default，subset=None， inplace =False）
-
-使用指定方法填写NA/NAN值
-DataFrame.fillna( value=None , method=None , axis=None ,
-                inplace=False , limit=None , downcast=None )
 
 截断值：
 df.loc[df['...']<0] = 0
