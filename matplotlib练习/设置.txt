@@ -46,6 +46,36 @@ import seaborn as sns
 sns.set(style="ticks")
 style = white, dark, whitegrid, darkgrid, ticks
 
+plt.style.use('grayscale')
+
+['Solarize_Light2',
+ '_classic_test_patch',
+ 'bmh',
+ 'classic',
+ 'dark_background',
+ 'fast',
+ 'fivethirtyeight',
+ 'ggplot',
+ 'grayscale',
+ 'seaborn',
+ 'seaborn-bright',
+ 'seaborn-colorblind',
+ 'seaborn-dark',
+ 'seaborn-dark-palette',
+ 'seaborn-darkgrid',
+ 'seaborn-deep',
+ 'seaborn-muted',
+ 'seaborn-notebook',
+ 'seaborn-paper',
+ 'seaborn-pastel',
+ 'seaborn-poster',
+ 'seaborn-talk',
+ 'seaborn-ticks',
+ 'seaborn-white',
+ 'seaborn-whitegrid',
+ 'tableau-colorblind10']
+
+
 # 设置坐标轴范围
 plt.xlim(-40,2000)
 plt.ylim(-1,80)
@@ -153,3 +183,6 @@ plt.show()
 
 回归模型图
 sns.lmplot()
+
+回归散点图
+sns.regplot()
